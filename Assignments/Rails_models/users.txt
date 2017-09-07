@@ -1,0 +1,71 @@
+rails new Users_model_testing
+	create new project
+
+rails g model User first_name last_name email age:integer
+	create user model with first/last name, email, and age
+
+User.create(first_name:'Jerrod', last_name:'Quin', email:'j@j.com', age:23)
+User.create(first_name:'Ryan', last_name:'Quin', email:'r@r.com', age:23)
+3.times{
+	User.create(
+	first_name:Faker::Name.first_name, 					  
+	last_name:Faker::Name.last_name, age:30, email:Faker::Internet.email)
+}
+	create a few users in db
+
+class User < ActiveRecord::Base
+  validates :first_name, :last_name, :email, :age, presence: true
+  validates_length_of :first_name, :last_name, :minimum => 2
+  validates_numericality_of :age, :only_integer => true
+  validates_inclusion_of :age, :in => 10...150, :message => "Can only be between 10 and 150"
+end
+	validations: all need to be present, names at least 2 in length, age has to 	be a number between 10 and 150
+
+USE RAILS CONSOLE FOR ALL BELOW
+
+
+ONE********************
+user1 = User.new
+user1.valid?
+ 	=> false 
+user1.save
+   (0.1ms)  begin transaction
+   (0.1ms)  rollback transaction
+user1.errors.full_messages
+ 	=> ["First name can't be blank", "First name is too short (minimum is 2 		characters)", "Last name can't be blank", "Last name is too short (minimum is 	2 characters)", "Email can't be blank", "Age can't be blank", "Age is not a 	number", "Age Can only be between 10 and 150"] 
+
+	see if my validations work
+TWO****************************
+User.create(first_name:'John', last_name:'d', age:1, email:'email')
+   (0.1ms)  begin transaction
+   (0.2ms)  rollback transaction
+
+	make sure console returns appropriate error message if yo try to save 		something that doesn’t meet validations, one also shows this. 
+
+THREE****************************
+User.all
+	find all users
+FOURTH****************************
+User.first
+	find first user
+FIFTH****************************
+User.last
+	find last user
+SIXTH****************************
+User.order(:first_name)
+	get users sorted by their first name
+SEVENTH****************************
+User.find(3)
+User.update(3, last_name:'new last')
+	know how to find user with id of 3 and update the last name
+
+EIGHT****************************
+User.destroy(4)
+	know how delete the record of user whose id is 4
+
+
+
+
+
+
+

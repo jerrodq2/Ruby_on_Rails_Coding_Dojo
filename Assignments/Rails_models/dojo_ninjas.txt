@@ -1,0 +1,118 @@
+rails g model Dojo name city state
+rails g model Ninja first_name last_name dojo:references
+
+Dojo.create(name:'CodingDojo SiliconValley', city:'Mountain View', state:'CA')
+Dojo.create(name:'CodingDojo Seatle', city:'Seattle', state:'WA')
+Dojo.create(name:'CodingDojo New York', city:'New York', state:'NY')
+	create three dojos
+
+class Dojo < ActiveRecord::Base
+  has_many :ninjas
+  validates :state, length: {is: 2}
+  validates :name, :city, :state, presence: true
+end
+class Ninja < ActiveRecord::Base
+  belongs_to :dojo
+  validates :first_name, :last_name, presence: true
+end
+	validations
+
+RUBY CONSOLE COMMANDES*****************************************************
+
+FIRST***************************************
+1.upto(3){|i| Dojo.destroy(i)}
+	destroy the three dojos I created
+SECOND***************************************
+Dojo1[:name]='Dojo1'
+ => "Dojo1" 
+2.3.0 :029 > Dojo1[:city]='Dallas'
+ => "Dallas" 
+2.3.0 :030 > Dojo1[:state]='TX'
+ => "TX" 
+2.3.0 :031 > Dojo1.valid?
+ => true 
+2.3.0 :032 > Dojo1.save
+	create three dojos using Dojo.save, this was just for one of them  
+
+THIRD***************************************
+Dojo2
++----+------+------+-------+------------+------------+
+| id | name | city | state | created_at | updated_at |
++----+------+------+-------+------------+------------+
+|    | test |      |       |            |            |
++----+------+------+-------+------------+------------+
+Dojo2.save
+   (0.1ms)  begin transaction
+   (0.1ms)  rollback transaction
+Dojo2.errors.full_messages
+ => ["State is the wrong length (should be 2 characters)"] 
+
+	make sure validations work
+
+FOURTH***************************************
+Dojo.first.ninjas.create(first_name: 'first', last_name:'last')
+Dojo.first.ninjas.create(first_name: 'Louis', last_name:'Tom')
+Dojo.first.ninjas.create(first_name: 'John', last_name:'Johnson')
+	create three ninjas that belong to the first Dojo
+
+FIFTH***************************************
+Dojo.second.ninjas.create(first_name:'Sam', last_name:'Winchester')
+Dojo.second.ninjas.create(first_name:'Dean', last_name:'Winchester')
+Dojo.second.ninjas.create(first_name:'Adom', last_name:'Winchester')
+	create three new ninjas that belong to the second dojo
+SIXTH***************************************
+Dojo.third.ninjas.create(first_name:'Michael', last_name:'ArchAngel')
+Dojo.third.ninjas.create(first_name:'Lucifer', last_name:'ArchAngel')
+Dojo.third.ninjas.create(first_name:'Gabriel', last_name:'ArchAngel')
+	create three ninjas for the third dojo
+SEVENTH***************************************
+Dojo.first.ninjas.all
++----+------------+-----------+---------+-------------------------+-------------------------+
+| id | first_name | last_name | dojo_id | created_at              | updated_at              |
++----+------------+-----------+---------+-------------------------+-------------------------+
+| 1  | first      | last      | 4       | 2016-12-02 03:08:59 UTC | 2016-12-02 03:08:59 UTC |
+| 2  | Louis      | Tom       | 4       | 2016-12-02 03:09:16 UTC | 2016-12-02 03:09:16 UTC |
+| 3  | John       | Johnson   | 4       | 2016-12-02 03:09:26 UTC | 2016-12-02 03:09:26 UTC |
++----+------------+-----------+---------+-------------------------+-------------------------+
+Dojo.second.ninjas.all
+Dojo.third.ninjas.all
+	Know how to get all of the ninjas for any dojo
+
+EIGHT***************************************
+Dojo.second.ninjas.select(:first_name).order("created_at DESC")
+	retrieve the first_names of the ninjas that belong to the second dojo and order the result by created_at DESC order
+
+NINTH***************************************
+	Delete the second dojo. How could you adjust your model so that it 			automatically removes all of the ninjas associated with that dojo?
+	**************FIRST WAY I DID THIS**********
+Dojo.second.ninjas.destroy_all
+Dojo.second.destroy
+	Delete the second dojo. How could you adjust your model so that it 			automatically removes all of the ninjas associated with that dojo?
+
+	One way is shown above, first destroy all the ninjas associated with it. 		Delete_all only deletes the reference, so you have to do destroy_all to 		delete the actual ninja
+
+
+	*************SECOND WAY I DID IT************
+class Dojo < ActiveRecord::Base
+  has_many :ninjas
+  validates :state, length: {is: 2}
+  validates :name, :city, :state, presence: true
+
+
+  before_destroy :delete_ninjas
+
+  def delete_ninjas
+    Dojo.find(self.id).ninjas.destroy_all
+  end
+end
+
+Rails Console Commands******
+Dojo.find(6).destroy
+	
+	
+	Second method, I created a before_destroy method in the dojo.rb model, so that it would destroy_all on any ninja with that Dojo id as it’s reference, tested it twice, worked, it destroyed all ninjas associated with it then itself.
+
+
+
+
+

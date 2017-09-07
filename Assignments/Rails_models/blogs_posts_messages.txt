@@ -1,0 +1,88 @@
+rails g model Post blog:references title content:text
+rails g model Message post:references author message:text
+
+			*************VALIDATIONS*************
+class Blog < ActiveRecord::Base
+  has_many :posts
+  has_many :messages, through: :posts
+  validates :name, :description, presence: true
+end
+	require the presence of name and description for the blog.
+
+class Post < ActiveRecord::Base
+  belongs_to :blog
+  has_many :messages
+  validates :title, :content, presence: true, length: {minimum: 7}
+end
+	require the presence of title and content for the posts, require the title to 	be at least 7 characters long.
+
+class Message < ActiveRecord::Base
+  belongs_to :post
+  validates :author, :message, presence: true
+  validates :message, length: {minimum: 15}
+end
+	require author and message for the messages. Require the message to be at 		least 15 characters long.
+		********************END OF VALIDATIONS********************
+
+		********************RAILS CONSOLE COMMANDS******************
+FIRST***********************************
+5.times{
+	Blog.create(name:Faker::Book.title, description:Faker::Hipster.paragraph)
+	}
+	create 5 new blogs
+
+SECOND***********************************
+ 4.times{
+	Blog.first.posts.create(title:Faker::Book.title, 	 		 		content:Faker::Hipster.sentence)
+	}
+	create several posts for each blog, this is just the ones I made for the 		first blog
+THIRD***********************************
+3.times{
+	Post.first.messages.create(author:Faker::Name.name,
+	message:Faker::Hipster.sentence) 
+	}
+	create several messages for the first post
+
+FOURTH***********************************
+Blog.first.posts.all
+	know how to find all posts for the first blog
+
+FIFTH***********************************
+Blog.last.posts.order(title: :desc)
+	know how to retrieve all posts for the last blog (sorted by title in the DESC 	order).
+SIXTH***********************************
+Post.update(1, title: 'NewTitle')
+	know how to update the first post's title.
+SEVENTH***********************************
+			HAVE THIS IN THE MODEL
+before_destroy :delete_messages
+
+  def delete_messages
+    Post.find(self.id).messages.destroy_all
+  end
+
+Post.third.destroy
+	Destroyed all related messages thanks to my model method*****
+	know how to delete the third post (have the model automatically delete all 		messages associated with the third post when you delete the third post).
+EIGHTH***********************************
+Blog.all
+	know how to retrieve all blogs.
+NINTH***********************************
+Blog.where(id: (1..4))
+	know how to retrieve all blogs whose id is less than 5.
+TENTH***********************************
+I’m good
+	Personal Note: if your query returns a single result(blog.first/find(3)) you get an instance. It your query returns more than one, it is an array. So this would work: Blog.first.posts		and this would work: Blog.first.posts.first.messages, but this won’t work: Blog.first.posts.messages	because, posts is no longer an instance, it’s an array, and .messages is acting like a method on that array. In order to get all the messages for the all the posts of the first blog, i did this:
+Blog.first.posts.each{|i| i.messages}
+
+	think of other potential information you may need for this application and  	get comfortable being able to pull information using the console.
+
+
+
+
+
+
+
+
+
+

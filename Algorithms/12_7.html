@@ -1,0 +1,119 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+    
+
+    //************************* ALL OF THESE METHODS ASSUMES WE WON'T ACCEPT ARRAYS FOR A VALUE AND CREATE ENDLESS INNER ARRAYS
+    //************** also, I tried to write out and implement the hashcode function from the book but the syntax doesn't look like javascript, couldn't get it to work or find a working on online, so I haven't been able to test any of these.
+
+    function HashMap(n){
+      this.capacity = n;
+      this.table = []
+    }
+    function hashKey(key, capacity){
+      var hash = key.hashcode()
+      return mod(hash, capacity)
+    }
+
+
+    HashMap.prototype.remove = function(key){
+      var index = hashKey(key, this.capacity)
+      if(!Array.isArray(this.table[index]))//our add method creates an array at an index if there if there isn't one there already, so if there isn't an array at that index, it is empty and the key isn't in the hashmap
+        return null
+      var arr = [], temp
+      for (var i = 0; i < this.table[index].length; i++){
+        if(this.table[index][i][1] == key){
+          temp = this.table[index][i][0] //value we return, this key,value pair that we're supposed to remove won't gett added to arr. see next comment
+        } else{
+          arr.push(this.table[index][i])
+        } // in order to remove the key without using built in methods, I create a new array(arr), push each array key,value pair inside arr if it doesn't contain that key. Then at the end, I make the array at that index of the hashmap equal to arr. Splice would've been better, but probably works the same way.
+      } //end of for loop
+      this.table[index] = arr
+      return temp? temp: null
+    }
+
+
+
+    HashMap.prototype.grow = function(){
+      var cap = Math.floor(this.capacity * 1.5) //new capacity
+      var hash2 = hashMap(cap) // new hashmap
+      for(var i = 0; i <this.table.length; i++){ // the idea is to get every key,value pair in the original hashmap and place them inside this new hashmap
+        if(!Array.isArray(this.table[i]))
+          continue
+        for(var x = 0; x < this.table[i].length; x ++){
+          hash2.add(this.table[i][x][0] /* the key */, this.table[i][x][1] /* the value */) //created this method below
+        }
+      } // end of big for loop
+      this.table = hash2.table //just re-write the orignal hashmap table, so now all the key,value pairs will be in the right place
+      this.capacity = hash2.capacity
+      return this
+    }
+
+
+    HashMap.prototype.addHashMap = function(map){//map = second hashmap
+      if(map.isEmpty())//will return true if second hash is empty
+        return this //nothing to add
+      for(var i = 0; i < map.table.length; i++){
+        if(!Array.isArray(map.table[i]))
+          continue
+        for(var x = 0; x < map.table[i].length; x++){// basically, we're iterating through every inner array in map, if there is an array at that index, and using the add method I created below to add each key,value pair to the original hashmap
+          var k = this.map[table[i][x][0]]
+          if(this.findKey(k))
+            this.remove(k) //when we add a key from map to the original hashmap, and that key already exists in the original hashmap(duplicate situation) we need to overwrite the original key, so simplist way to do that is check if the key is already in the original hashmap(created that method below), and if so, remove it, so the new one can be added without duplicates.
+          this.add(map.table[i][x][0], map.table[i][x][1])
+        } // end of inner loop
+
+      }//end of outer loop
+      return this
+    }
+
+
+
+    //************PREVIOUS METHODS I USED***********
+    HashMap.prototype.add = function(key, value){
+      var hash = key.hashcode()
+      var index = mod(hash, this.capacity)
+      if(Array.isArray(this.table[index])){
+        this.table[index].push([key, value])
+      } else{ //if index is empty, this creates the inner array with the key value pair already inside
+        this.table[index].push([ [key,value] ])
+      }
+      return this
+    }
+
+    HashMap.prototype.findKey = function(key){
+      var hash = key.hashcode()
+      var index = mod(hash, this.capacity)
+      if(Array.isArray(this.table[index])){
+        for (var i = 0; i < this.table[index].length; i++){
+          if(this.table[index][i][0] == key)
+            return this.table[index][i][1]
+        }
+      }
+      return false //this works if the index is empty or the key isn't contained in it
+    }
+
+    HashMap.prototype.isEmpty = function(){
+      return this.tablelength == 0? true: false
+    }
+
+
+
+
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

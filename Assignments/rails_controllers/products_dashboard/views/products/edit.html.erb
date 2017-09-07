@@ -1,0 +1,25 @@
+<h1>Editing Product</h1>
+<% if flash[:errors] %>
+  <p><%= flash[:errors] %></p>
+<% end %>
+<form class="" action="/products/<%= @product[:id] %>" method="post">
+  <input name="_method" type="hidden" value="patch" />
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  Name: <input type="text" name="product[name]" value="<%= @product[:name] %>">
+  Description: <input type="text" name="product[description]" value="<%= @product[:description] %>">
+  Price: <input type="float" name="product[pricing]" value="<%= @product[:pricing] %>">
+  Category: <select class="" name="product[category_id]">
+    <% @cat.each do |i| %>
+      <% if @product.category && i.name == @product.category.name%>
+        <option value="<%= i.id %>" selected="selected"><%= i.name %></option>
+      <% else %>
+        <option value="<%= i.id %>"><%= i.name %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <input type="submit" name="" value="Update">
+</form>
+</br>
+</br>
+</br>
+<a href="/products">Back</a>
