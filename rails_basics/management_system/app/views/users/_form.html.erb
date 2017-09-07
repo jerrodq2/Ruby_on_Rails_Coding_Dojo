@@ -1,0 +1,43 @@
+<%= form_for @user do |f| %>
+  <%= f.label :first_name%>:
+  <%= f.text_field :first_name%><br />
+
+  <%= f.label :last_name%>:
+  <%= f.text_field :last_name%><br />
+
+  <%= f.label :email%>:
+  <%= f.text_field :email%><br />
+
+  <%= f.label :password%>:
+  <%= f.text_field :password%><br />
+  <%= f.submit %>
+<%  end %>
+
+<%= flash[:errors] %></br>
+
+
+<%= link_to 'Back', users_path%>
+<!-- Short cut for an anchor tag, 'Back' is the text, users_path is where it's sent-->
+
+<!--
+The form_for is designed to create or update a resource much easier and simpler than with html, the form_for automatically puts into an authenticity token, and defines the method (post), and knows whether to send the data to the create or update route. And may even assign the form a class, in this example that class would be 'user'
+-->
+
+
+<!-- This is an example of what this form_for would look like as an html form, user is person in this example:
+
+<form action="/people" class="new_person" id="new_person" method="post">
+  <input name="authenticity_token" type="hidden" value="NrOp5bsjoLRuK8IW5+dQEYjKGUJDe7TQoZVvq95Wteg=" />
+  <label for="person_first_name">First name</label>:
+  <input id="person_first_name" name="person[first_name]" type="text" /><br />
+
+  <label for="person_last_name">Last name</label>:
+  <input id="person_last_name" name="person[last_name]" type="text" /><br />
+
+  <input name="commit" type="submit" value="Create Person" />
+</form>
+
+
+
+
+-->

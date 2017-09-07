@@ -1,0 +1,28 @@
+<%= link_to 'All Users', users_path %>
+<h2>Hi <%= @user.name %>!</h2>
+</br>
+<h4>Here is your profile description</h4>
+<%= @user.description %></br>
+</br>
+</br>
+<h3>Your Professional Network</h3>
+<ul>
+  <% @user.networks.each do |i| %>
+    <li><%= link_to "#{i.associate.name}", user_path(i.associate.id)%></li>
+  <% end %>
+</ul>
+</br>
+<h4>Invitations</h4>
+<h5>The following people asked for you to be in their network</h5>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <% @invitations.each do |i| %>
+    <tr>
+      <td><%= link_to "#{i.sender.name}", user_path(i.sender.id)%></td>
+      <td><%= link_to 'Accept Invite', "/create/#{i.sender.id}" %> | <%= link_to 'Ignore', "/destroy/#{i.sender.id}", method: :delete %></td>
+    </tr>
+  <% end %>
+</table>

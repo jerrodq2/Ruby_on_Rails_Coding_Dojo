@@ -1,0 +1,39 @@
+<%= link_to 'Events Dashboard', '/events' %>
+<h1><%= @event.name %></h1>
+<h3>Host: <%= @event.user.first_name %></h3>
+<h3>Date: <%= @event.date.strftime("%B %d, %Y") %></h3>
+<h3>Location: <%= @event.city %>, <%= @event.state.state %></h3>
+<h4>People who have joined this event: <%= @event.attending_users.length %></h4>
+<table>
+  <tr>
+    <th>Name</th><th>Location</th><th>State</th>
+  </tr>
+  <% @event.attending_users.each do |i| %>
+    <tr>
+      <td><%= i.first_name%> <%= i.last_name%></td>
+      <td><%= i.city%></td>
+      <td><%= i.state.state%></td>
+    </tr>
+  <% end %>
+</table>
+
+<h3>Discussion about this event:</h3>
+<% if @event.comments.length == 0 %>
+  <p>- No current Comments - </p>
+<% end %>
+<% @event.comments.each do |i| %>
+  <p><%= i.user.first_name %> says: <%= i.content %></p>
+  <hr>
+<% end %></br>
+</br>
+<h4>Add Comment:</h4>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |i| %>
+    <p><%= i %></p>
+  <% end %>
+<% end %>
+<%= form_for @comment do |i| %>
+  <%= i.text_area :content %></br>
+  <%= i.hidden_field(:event, :value => @event.id) %>
+<%= i.submit %>
+<% end %>

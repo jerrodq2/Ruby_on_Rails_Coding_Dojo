@@ -1,0 +1,86 @@
+<%= link_to 'Go to All Products', shoes_path %>
+</br>
+<h3>Hi <%= session[:name] %></h3>
+<h3>Sell Product</h3>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |i| %>
+    <p><%= i %></p>
+  <% end %>
+<% end %>
+<%= form_for @shoe do |i| %>
+  <%= i.label :name %>
+  <%= i.text_field :product %></br>
+
+  <%= i.label :amount %>
+  <%= i.number_field :amount %></br>
+
+  <%= i.submit(value='Sell') %>
+<% end %>
+</br>
+<h3>Your Products that are not yet sold:</h3>
+<table class="yours">
+  <tr>
+    <th>Product</th><th>Date Posted</th><th>Amount</th><th>Action</th>
+  </tr>
+  <% if @shoes.length == 0 %>
+    <td> - </td><td> - </td><td> - </td><td> - </td>
+  <% end %>
+  <% @shoes.each do |i| %>
+    <tr>
+      <td><%= i.product %></td>
+      <td><%= i.date.strftime("%B %d, %Y") %></td>
+      <td>$<%= i.amount %></td>
+      <td><%= link_to 'Remove', shoe_path(i), method: :delete %></td>
+    </tr>
+  <% end %>
+</table>
+</br>
+<h3>Your Sales</h3>
+<table class="sold">
+  <tr>
+    <th>Product</th><th>Date bought</th><th>Buyer</th><th>Amount</th>
+  </tr>
+  <% if @sells.length == 0 %>
+    <tr>
+      <td> - </td><td> - </td><td> - </td><td> - </td>
+    </tr>
+  <% end %>
+  <% @sells.each do |i| %>
+    <tr>
+      <td><%= i.shoe.product %></td>
+      <td><%= i.date.strftime("%B %d, %Y") %></td>
+      <td><%= i.buyer.first_name %></td>
+      <td>$<%= i.shoe.amount %></td>
+    </tr>
+  <% end %>
+</table>
+<% if @sell_total == nil %>
+  <h5 class="sold_total">Total: $0</h5>
+<% else %>
+  <h5 class="sold_total">Total: $<%= @sell_total %></h5>
+<% end %>
+</br>
+<h3>Your Purchases</h3>
+<table class="bought">
+  <tr>
+    <th>Product</th><th>Date bought</th><th>Seller</th><th>Amount</th>
+  </tr>
+  <% if @sells.length == 0 %>
+    <tr>
+      <td> - </td><td> - </td><td> - </td><td> - </td>
+    </tr>
+  <% end %>
+  <% @buys.each do |i| %>
+    <tr>
+      <td><%= i.shoe.product %></td>
+      <td><%= i.date.strftime("%B %d, %Y") %></td>
+      <td><%= i.seller.first_name %></td>
+      <td>$<%= i.shoe.amount %></td>
+    </tr>
+  <% end %>
+</table>
+<% if @buy_total == nil %>
+  <h5 class='bought_total'>Total: $0</h5>
+<% else %>
+  <h5 class='bought_total'>Total: $<%= @buy_total %></h5>
+<% end %>

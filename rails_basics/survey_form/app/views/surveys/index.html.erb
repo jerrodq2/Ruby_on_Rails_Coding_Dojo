@@ -1,0 +1,20 @@
+<form class="" action="/middle" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  Your Name: <input type="text" name="info[name]" value="">
+  Dojo Location: <input type="text" name="info[location]" value="">
+  Favorite Language: <select class="" name="info[language]">
+    <option value="Python">Python</option>
+    <option value="Ruby">Ruby</option>
+    <option value="Javascript">Javascript</option>
+  </select>
+  Comment (optional): <textarea name="info[comment]" rows="8" cols="80"></textarea>
+  <input type="submit" name="" value="Submit">
+</form>
+
+
+<!--
+Notice in the form I don't send over the different fields (input, textarea, select) as indivdual values, I sent them over as such: info[name]. This sends it over as an associative array, which looks like this:
+
+{"name"=>"Jerrod", "location"=>"Dallas", "language"=>"Python", "comment"=>"comment here"}
+
+-->
