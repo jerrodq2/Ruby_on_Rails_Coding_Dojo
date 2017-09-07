@@ -1,0 +1,22 @@
+<%= link_to 'Go to Dashboard', "/dashboard/#{session[:id]}" %>
+</br>
+<h3>Hi <%= session[:name] %></h3>
+<h3>All Products</h3>
+<table>
+  <tr>
+    <th>Product</th>
+    <th>Seller</th>
+    <th>Date Posted</th>
+    <th>Amount</th>
+    <th>Action</th>
+  </tr>
+  <% @shoes.each do |i| %>
+    <tr>
+      <td><%= i.product %></td>
+      <td><%= i.user.first_name %> <%= i.user.last_name %></td>
+      <td><%= i.date.strftime("%B %d, %Y") %></td>
+      <td>$<%= i.amount %></td>
+      <td><%= link_to 'Buy', "/new/purchase/#{i.id}/#{i.user.id}" %></td>
+    </tr>
+  <% end %>
+</table>

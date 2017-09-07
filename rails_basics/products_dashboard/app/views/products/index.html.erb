@@ -1,0 +1,37 @@
+<h1>Listing Products</h1>
+<a href="/comments">Comments</a></br>
+</br>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Category</th>
+    <th>Actions</th>
+  </tr>
+
+
+  <% @products.each do |i| %>
+    <tr>
+      <td><%= i.name %></td>
+      <!--  notice that you can access the values in the object through the keys either by i.key or i[:key], since @products is an array of objects-->
+      <td><%= i[:description] %></td>
+      <td>$<%= i[:pricing] %></td>
+
+      <% if i.category %>
+        <td><%= i.category.name %></td>
+        <!-- A simple example of accessing another table through a row. row.other_table.other_table_column, first I target the row I'm on (i), then the table (category), then the column from that table -->
+      <% else %>
+        <td> - </td>
+      <% end %>
+
+      <td><a href="/products/<%= i[:id]%>">Show</a> | <a href="/products/<%= i[:id]%>/edit">Edit</a> | <a href="/products/<%= i[:id]%>" data-method='delete'>Delete</a></td>
+      <!-- the above anchor tags show how you can use the query to input id, or selecte the method for deleting -->
+    </tr>
+  <% end %>
+
+
+
+</table>
+
+<a href="/products/new">New Product</a>

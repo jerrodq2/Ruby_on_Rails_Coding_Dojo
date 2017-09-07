@@ -1,0 +1,31 @@
+Name: <%= @product[:name] %></br>
+Description: <%= @product[:description] %></br>
+Price: $<%= @product[:pricing] %></br>
+<% if @product.category %>
+Category: <%= @product.category.name %>
+<% else %>
+Category: N/A
+<% end %>
+
+
+
+</br>
+</br>
+<a href="/products/<%= @product[:id] %>/edit">Edit</a> | <a href="/products/<%= @product[:id] %>" data-method='delete'> Delete </a> | <a href="/">Back</a>
+</br>
+
+
+<h2>Comment:</h2>
+<form class="" action="/comments" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="id" value="<%= @product.id %>">
+  <textarea name="comment[comment]" rows="8" cols="80"></textarea>
+  <input type="submit" name="" value="Submit">
+</form>
+<!-- Notice how in this form I send over the id in a hidden input, and the data as an associative array (the comment[comment] part), which looks like this in the params sent over: "comment"=>{"comment"=>"indeed he can"}, basically, the params are formatted like an associative array as well, so it's an associative array within an associative array-->
+
+<!-- this is an example of the full params that are sent over from this form: {"authenticity_token"=>"PN1ZZ+kXSZbtTCrtkDZh72WzurC0XFDNSSXb6KYlZ60=", "id"=>"6", "comment"=>{"comment"=>"indeed he can"}, "controller"=>"products", "action"=>"comment_create"} -->
+
+<% @comments.each do |i| %>
+  <p><%= i.comment %></p>
+<% end %>

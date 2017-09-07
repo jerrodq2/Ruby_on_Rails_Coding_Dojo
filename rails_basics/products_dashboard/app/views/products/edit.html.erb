@@ -1,0 +1,38 @@
+<h1>Editing Product</h1>
+<% if flash[:errors] %>
+  <p><%= flash[:errors] %></p>
+<% end %>
+
+
+<form class="" action="/products/<%= @product[:id] %>" method="post">
+  <input name="_method" type="hidden" value="patch" />
+  <!-- Notice how I use a hidden input to determine the method, otherwise, it would send it over to the show route -->
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <!-- Notice below for the value, I can access the keys from the @product object with .name or [:name] -->
+  Name: <input type="text" name="product[name]" value="<%= @product.name %>">
+  Description: <input type="text" name="product[description]" value="<%= @product[:description] %>">
+  Price: <input type="float" name="product[pricing]" value="<%= @product[:pricing] %>">
+
+  Category: <select class="" name="product[category_id]">
+    <% @cat.each do |i| %>
+      <% if @product.category && i.name == @product.category.name%>
+      <!-- Important Note: notice the first part of the if statment "if @product.category", and notice how i'm not comparing it to anything. this is because some of my products didn't have a category with them, simpley because I created them prior to them needing a category. So it first checks if there is even a category with the product, if not, then it doesn't even check further in the if statement. If all products have categories, which I later updated them so that they do, that part is uneccessary, but a good precaution-->
+
+      <!-- Notice how I use this if statement to have the correct category selected, or the category that the product currently belongs to selected -->
+        <option value="<%= i.id %>" selected="selected"><%= i.name %></option>
+      <% else %>
+        <option value="<%= i.id %>"><%= i.name %></option>
+      <% end %>
+    <% end %>
+  </select>
+
+
+  <input type="submit" name="" value="Update">
+</form>
+
+
+</br>
+</br>
+</br>
+<a href="/products">Back</a>

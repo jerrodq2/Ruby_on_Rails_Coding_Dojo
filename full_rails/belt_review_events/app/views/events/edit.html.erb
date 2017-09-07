@@ -1,0 +1,20 @@
+<%= link_to 'Events Dashboard', '/events' %>
+<h1>Edit Your Event</h1>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |i| %>
+    <p><%= i %></p>
+  <% end %>
+<% end %>
+<%= form_for @event do |i| %>
+  <%= i.label :name %>:
+  <%= i.text_field :name %></br>
+
+  <%= i.label :Date %>:
+  <%= i.date_field :date %></br>
+
+  <%= i.label :location %>:
+  <%= i.text_field :city %>
+  <%= i.select :state, options_for_select(@states.collect{|x| [x.state, x.id]}), include_blank: false %></br>
+
+  <%= i.submit %>
+<% end %>

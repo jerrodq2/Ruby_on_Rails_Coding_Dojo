@@ -1,0 +1,25 @@
+<h1>Welcome to the Great Number Game!</h1>
+<h4>I am thinking of a number between 1 and 100, take a guess!</h4>
+
+<% if flash[:error] && !flash[:success] %>
+  <div>
+    <h1><%= flash[:error] %></h1>
+  </div>
+<% end %>
+
+<% if flash[:success] %>
+  <div class="">
+    <h1><%= flash[:success] %></h1>
+    <form class="" action="/reset" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <!-- All forms in rails needs this authenticity token -->
+      <input type="submit" name="" value="Play again!">
+    </form>
+  </div>
+<% end %>
+
+<form class="" action="/guess" method="post">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+<input type="number" name="number">
+<input type="submit" name="" value="Submit">
+</form>

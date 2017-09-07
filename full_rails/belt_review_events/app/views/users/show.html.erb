@@ -1,0 +1,26 @@
+<%= link_to 'Events Dashboard', '/events' %></br>
+
+<h1>Edit Your Profile</h1>
+<% if flash[:errors] %>
+  <% flash[:errors].each do |i| %>
+    <p><%= i %></p>
+  <% end %>
+<% end %>
+</br>
+<%= form_for @user do |i| %>
+  <%= i.label :first_name %>:
+  <%= i.text_field :first_name %></br>
+
+  <%= i.label :last_name %>:
+  <%= i.text_field :last_name%></br>
+
+  <%= i.label :email %>:
+  <%= i.email_field :email %></br>
+
+  <%= i.label :location %>:
+  <%= i.text_field :city%></br>
+
+  <%= i.select :state, options_for_select(@states.collect{|x| [x.state, x.id]}), include_blank: false %></br>
+
+  <%= i.submit %>
+<% end %>

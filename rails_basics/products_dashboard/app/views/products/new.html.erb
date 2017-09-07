@@ -1,0 +1,32 @@
+<h1>New Product</h1>
+<% if flash[:errors] %>
+  <p><%= flash[:errors] %></p>
+
+  <% flash[:errors].each do |i| %>
+    <p><%= i %></p>
+  <% end %>
+  <!-- The first way of showing the flash messages, all at once in a p tag, shows it as an array, not something you'd want clients to see. Using the .each iterator shows them as individual flash messages without quote marks, see below for exampels of what I mean -->
+  <!-- Using just a p tag: ["Name can't be blank", "Description can't be blank", "Pricing can't be blank"] -->
+  <!-- Using the .each iterator (just one example): Name can't be blank -->
+
+<% end %>
+
+
+<form class="" action="/products" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  Category: <select name="category">
+    <% @cats.each do |i| %>
+      <option value="<%=i.id%>"><%=i.name%></option>
+      <!-- Notice I pass the id and not name as the value, because we use the category_id during creation of a product -->
+    <% end %>
+  </select>
+
+  Name: <input type="text" name="product[name]" value="">
+  Description: <input type="text" name="product[description]" value="">
+  Price: <input type="float" name="product[pricing]" value="">
+  <!-- Once again, I send the data over as an associative array, which looks like:  "product"=>{"name"=>"shovel", "description"=>"Common household item", "pricing"=>"10.00"}-->
+  <input type="submit" name="" value="Create">
+</form>
+
+<a href="/products">Back</a>
