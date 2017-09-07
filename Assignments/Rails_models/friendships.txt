@@ -1,0 +1,91 @@
+rails g model User first_name last_name
+rails g model Friendship user:references friend:references
+
+rake db:migrate
+
+class User < ActiveRecord::Base
+  has_many :friendships
+  has_many :friends, :through => :friendships
+end
+
+class Friendship < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :friend, :class_name => 'User'
+end
+
+
+		*******************CONSOLE*************
+
+
+		******************CREATING****************
+5.times{
+	User.create(first_name:Faker::Name.first_name,
+	last_name:Faker::Name.last_name)
+	}
+	first I create 5 Users
+
+User.first.friendships.create(friend:User.second)
+	create a friendship between the first and second user
+
+(3..8).each{|i|
+	User.second.friendships.create(friend:User.find(i))
+	}
+	create 5 friends for second user(i put more users in the db prior)
+
+
+
+
+		****************FINDING********************
+
+User.second.friends
++----+------------+------------+-------------------------+-------------------------+
+| id | first_name | last_name  | created_at              | updated_at              |
++----+------------+------------+-------------------------+-------------------------+
+| 3  | Morgan     | Macejkovic | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
+| 4  | Ricardo    | Harris     | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
+| 5  | Ewell      | Klein      | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
+| 6  | Loma       | Strosin    | 2016-12-03 18:18:04 UTC | 2016-12-03 18:18:04 UTC |
+| 7  | Lorenzo    | Ward       | 2016-12-03 18:18:04 UTC | 2016-12-03 18:18:04 UTC |
+| 8  | Rosina     | Keebler    | 2016-12-03 18:18:04 UTC | 2016-12-03 18:18:04 UTC |
++----+------------+------------+-------------------------+-------------------------+
+	interestingly enough, even though the first friendship i created was between user first and second(see above), that friendship doesn’t show up here, but I can see it searching for the first’s friends(see below), probably, because in that a friendship, the first user was saved as the ‘User’, not the ‘friend’, and I searched for the second user’s friends
+
+User.first.friends
++----+------------+-----------+-------------------------+-------------------------+
+| id | first_name | last_name | created_at              | updated_at              |
++----+------------+-----------+-------------------------+-------------------------+
+| 2  | Giles      | Hessel    | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
++----+------------+-----------+-------------------------+-------------------------+
+	HOWEVER, I can still find both through the friendship table
+
+Friendship.first
++----+---------+-----------+-------------------------+-------------------------+
+| id | user_id | friend_id | created_at              | updated_at              |
++----+---------+-----------+-------------------------+-------------------------+
+| 1  | 1       | 2         | 2016-12-03 18:16:25 UTC | 2016-12-03 18:16:25 UTC |
++----+---------+-----------+-------------------------+-------------------------+
+
+Friendship.first.user
++----+------------+-----------+-------------------------+-------------------------+
+| id | first_name | last_name | created_at              | updated_at              |
++----+------------+-----------+-------------------------+-------------------------+
+| 1  | Name       | Trantow   | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
++----+------------+-----------+-------------------------+-------------------------+
+
+Friendship.first.friend
++----+------------+-----------+-------------------------+-------------------------+
+| id | first_name | last_name | created_at              | updated_at              |
++----+------------+-----------+-------------------------+-------------------------+
+| 2  | Giles      | Hessel    | 2016-12-03 18:14:30 UTC | 2016-12-03 18:14:30 UTC |
++----+------------+-----------+-------------------------+-------------------------+
+
+
+			**************DELETING*******************
+User.first.friendships.second.destroy
+	deleted the the first User’s second friendship (which was between him and the 	third user)
+
+
+
+		
+
+

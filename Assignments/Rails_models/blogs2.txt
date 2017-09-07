@@ -1,0 +1,136 @@
+rails g model User first_name last_name email
+rails g model Blog name description:text
+rails g model Owner user:references blog:references
+rails g model Post title content:text user:references blog:references
+rails g model Message author message:text post:references user:references
+
+		*******************MODELS/VALIDATIONS**************
+class User < ActiveRecord::Base
+  has_many :blogs, through: :owners
+  has_many :posts
+  has_many :messages
+  validates :first_name, :last_name, :email, presence: true
+end
+
+class Owner < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :blog
+end
+
+class Blog < ActiveRecord::Base
+  has_many :users, through: :owners
+  has_many :posts
+  has_many :messages, through: :posts
+  validates :name, :description, presence: true
+end
+
+class Post < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :blog
+  has_many :messages
+  validates :title, :content, presence: true
+end
+
+class Message < ActiveRecord::Base
+  belongs_to :post
+  belongs_to :user
+  validates :message, presence: true
+end
+
+		******************END OF MODELS/VALIDATIONS****************
+
+
+		******************CONSOLE COMMANDS*************************
+FIRST********************************************
+5.times{
+	User.create(first_name:Faker::Name.first_name, last_name:Faker::Name.last_name,
+	email:Faker::Internet.email)
+	}
+	Create 5 users
+SECOND********************************************
+5.times{
+	Blog.create(name:Faker::Book.title, description:Faker::Hipster.paragraph)
+	}
+	Create 5 blogs
+THIRD********************************************
+1.upto(3){|i| 
+	 User.first.owners.create(blog:Blog.find(i))
+	}
+	Have the first 3 blogs be owned by the first user
+FOURTH********************************************
+ User.second.owners.create(blog: Blog.find(4))
+	Have the 4th blog you create be owned by the second user
+FIFTH********************************************
+User.last.owners.create(blog:Blog.find(5))
+	Have the 5th blog you create be owned by the last user
+SIXTH********************************************
+for i in Blog.all
+	User.third.owners.create(blog: Blog.find(i))
+	end
+	Have the third user own all of the blogs that were created.
+SEVENTH********************************************
+3.times{
+	Post.create(user:User.first, blog:Blog.find(2), title:Faker::Book.title,
+	content:Faker::Hipster.sentence)
+	}
+	Have the first user create 3 posts for the blog with an id of 2. Remember that you shouldn't 	do Post.create(user: User.first, blog_id: 2) but more like Post.create(user: User.first, 		blog: Blog.find(2)). Again, you should never reference the foreign key in Rails.
+EIGHT********************************************
+5.times{
+	Post.create(user:User.second, blog:Blog.last, title:Faker::Book.title,
+	content:Faker::Hipster.sentence)
+	}
+	Have the second user create 5 posts for the last Blog.
+NINTH********************************************
+1.upto(4){ |i| 
+	i.upto(4){ |x|
+		 Post.create(user:User.third, blog:Blog.find(i), title:Faker::Book.title,
+		content:Faker::Hipster.sentence)
+	} 
+	This here is pure genius. Gold
+	Have the 3rd user create several posts for different blogs.
+TENTH********************************************
+2.times{ Message.create(user:User.third, post:Post.first, message:Faker::Hipster.sentence)}
+3.times{Message.create(user:User.third, post:Post.second, message:Faker::Hipster.sentence)}
+
+	Have the 3rd user create 2 messages for the first post created and 3 messages for the second 	post created
+
+ELEVENTH********************************************
+3.times{
+	Message.create(user:User.fourth, post:Post.last, message:Faker::Hipster.sentence)
+	}
+	Have the 4th user create 3 messages for the last post you created.
+TWELVE********************************************
+Post.update(2, user: User.last)
+	Change the owner of the 2nd post to the last user.
+THIRTEEN********************************************
+Post.second.update(content: Faker::Hipster.paragraph)
+	Change the 2nd post's content to be something else.
+FOURTEEN********************************************
+User.find(3).blogs
+	like a boss
+	Retrieve all blogs owned by the 3rd user (make this work by simply doing:
+	User.find(3).blogs).
+FIFTEEN********************************************
+User.third.posts.all
+	Retrieve all posts that were created by the 3rd user
+SIXTEEN********************************************
+User.third.messages
+	Retrieve all messages left by the 3rd user
+SEVENTEEN********************************************
+post1 = Blog.first.posts.includes(:user)
+	now if i do: post1.first.user,it will show that information without having to do another query and trip to the db
+	Retrieve all posts associated with the first blog as well as who left these posts.  
+EIGHTEEN********************************************
+P = Blog.first.messages.includes(:user)
+	Retrieve all messages associated with the first blog along with all the user information of 	those who left the messages.
+NINETEEN********************************************
+Blog.first.owners
+	Grab all user information of those that own the first blog (make this work by allowing 		Blog.first.owners to work).
+TWENTY********************************************
+Owner.find_by(blog: 1).update(user:User.third)
+Owner.find(1).destroy
+	either way works exit
+	Change it so that the first blog is no longer owned by the first user.
+
+
+

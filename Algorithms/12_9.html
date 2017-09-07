@@ -1,0 +1,117 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+
+    function Set(){
+      this.dataStore = []
+    }
+
+    Set.prototype.getData = function(){
+      return this.dataStore
+    }
+
+    Set.prototype.include = function(num){
+      for(var i = 0; i < this.dataStore.length; i++){
+        if(this.dataStore[i] == num)
+          return true
+      }
+      return false
+    }
+
+    Set.prototype.add = function(num){
+      if(this.include(num))
+        return false //already in set
+      this.dataStore.push(num)
+      return this
+    }
+
+    Set.prototype.remove = function(num){
+      if(!this.include(num))
+        return null
+      var arr = []
+      for (var i = 0; i < this.dataStore.length; i++){
+        if(this.dataStore[i] == num){
+          continue
+        } else{
+          arr.push(this.dataStore[i])
+        }
+      }
+      this.dataStore = arr
+      return this
+    }
+
+    Set.prototype.union = function(set){ // combines two sets without duplicates, ignores those
+      for(var i = 0; i < set.dataStore.length; i++){
+        if(!this.include(set.dataStore[i]))
+          this.dataStore.push(set.dataStore[i])
+      }
+      return this
+    }
+
+    Set.prototype.intersection = function(set){// creates new set with numbers that are in both previous sets
+      var set3 = new Set()
+      var short = this, long = set
+      if(this.dataStore.length > set.dataStore.length){
+        short = set
+        long = this
+      }
+      for(var i =0; i<short.dataStore.length; i++){
+        if(long.include(short.dataStore[i]))
+          set3.add(short.dataStore[i])
+      }
+      return set3
+    }
+
+    Set.prototype.difference = function(set){// creates a new set with the numbers of the original set, unless that number is in the second given set
+      var set3 = new Set()
+      for(var i = 0; i<this.dataStore.length; i++){
+        if(!set.include(this.dataStore[i]))
+          set3.add(this.dataStore[i])
+      }
+      return set3
+    }
+
+    Set.prototype.subset = function(set){
+      if(set.dataStore.length > this.dataStore.length)
+        return false
+      for(var i = 0; i < set.dataStore.length; i++){
+        if(!this.include(set.dataStore[i]))
+          return false
+      }
+      return true
+    }
+
+var s = new Set
+var a = new Set
+var b = new Set
+b.add(2).add(10).add(0)
+a.add(2).add(3).add(5).add(9).add(10)
+s.add(2).add(5).add(0).add(7).add(10)
+console.log(s.include(2))//true
+console.log(s.include(4))//false
+s.remove(0)
+console.log(s.union(a))//returns set with dataStore of [2, 5, 0, 7, 10, 4, 3, 9]
+console.log(s.intersection(a)) //returns set with datastore of [2, 5, 10]
+console.log(s.difference(a))// [7, 0]
+console.log(a.subset(s)) //false
+console.log(a.subset(b)) //true
+console.log(s.getData()) //[2, 5, 0, 7, 10, 4]
+
+
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

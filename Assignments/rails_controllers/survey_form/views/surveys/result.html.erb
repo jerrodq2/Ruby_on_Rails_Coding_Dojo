@@ -1,0 +1,15 @@
+<div class="">
+  <% if flash[:success] %>
+    <div>
+      <p><%= flash[:success]%></p>
+    </div>
+  <% end %>
+</div>
+<div class="">
+  <h1>Submitted info</h1>
+  <h4>Name: <%= session[:info]['name'] %></h4>
+  <h4>Dojo Location: <%= session[:info]['location'] %></h4>
+  <h4>Favorite Language: <%= session[:info]['language'] %></h4>
+  <h4>Comment: <%= session[:info]['comment'] %></h4>
+  <a href="/">Go Back</a>
+</div>

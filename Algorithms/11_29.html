@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+
+    SLQueue.prototype.size = function(){
+      if(!this.head)
+        return 0
+      var current = this.head
+      var count = 0
+      while(count){
+        count ++
+        current = current.next
+      }
+      return count
+    }
+
+    SLQueue.prototype.contains = function(){
+      if(!this.head)
+        return false
+      var current = this.head
+      while(current){
+        if(val == current.val)
+          return true
+        current = current.next
+      }
+      return false
+    }
+
+    SLQueue.prototype.front = function(){
+      return this.head? this.head.val: null
+    }
+
+    SLQueue.prototype.isEmpty = function(){
+      return this.head? false: true
+    }
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

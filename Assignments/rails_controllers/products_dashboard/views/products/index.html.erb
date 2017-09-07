@@ -1,0 +1,27 @@
+<h1>Listing Products</h1>
+<a href="/comments">Comments</a></br>
+</br>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Category</th>
+    <th>Actions</th>
+  </tr>
+  <% @products.each do |i| %>
+    <tr>
+      <td><%= i[:name] %></td>
+      <td><%= i[:description] %></td>
+      <td>$<%= i[:pricing] %></td>
+      <% if i.category %>
+        <td><%= i.category.name %></td>
+      <% else %>
+        <td> - </td>
+      <% end %>
+      <td><a href="/products/<%= i[:id]%>">Show</a> | <a href="/products/<%= i[:id]%>/edit">Edit</a> | <a href="/products/<%= i[:id]%>" data-method='delete'>Delete</a></td>
+    </tr>
+  <% end %>
+</table>
+
+<a href="/products/new">New Product</a>

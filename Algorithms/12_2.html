@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+    //pg. 74, reorder absolute queue, we're passed the queue. We didn't write this for a circular queue
+    function absolute(q){
+      var last = q[q.tail] // we create this variable for out first loop, so we know when to stop, it is the last value in the q
+          stack = [] // our stack for storage
+      while(true){ //break statement inside, this loop stores the negatives and just recycles the positives (takes them out and puts them in the back)
+        if(q[0] < 0){ //then this is a negative, and we store it
+          var temp = q[0]
+          stack.enqueue(q.dequeue) //this takes out the first value of q (q[0]) and pushes it into the stack
+          if(temp == last) // if we hit this, then we hit the original last element of the q, so we want to do whatever we planned to with it and break out of the loop.
+            break
+        } else { // then this is a positive so we just move it to the end of the q
+          var temp = q[0] //so we can see if we need to break
+          stack.enqueue(q.dequeue)
+          q.enqueue(stack.dequeue)
+          if(temp == last) // if we hit this, then we hit the original last element of the q, so we want to do whatever we planned to with it and break out of the loop.
+            break
+        }
+      } //end of while
+
+      While(stack.length > 0){ //this loop just pushes the negatives from the stack back into the q
+        q.enqueue(stack.dequeue)
+      }
+
+      while(q[0] >= 0){ //the final stack takes out each positive from the front to the back, and immediatley places them back into the q, putting everything in the correct order
+        stack.enqueue(q.dequeue)
+        q.enqueue(stack.dequeue)
+      }
+      return q // it is in order at this point
+
+    } //END
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

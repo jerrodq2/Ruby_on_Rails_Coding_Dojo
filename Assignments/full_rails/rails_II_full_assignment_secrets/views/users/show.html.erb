@@ -1,0 +1,25 @@
+</br>
+</br>
+</br>
+<%= @user.name %></br>
+<% if flash[:error] %>
+  <p><%= flash[:error] %></p>
+<% end %>
+</br>
+<%= form_for @sec do |i| %>
+  <%= i.label :content %>:
+  <%= i.text_area :content %></br>
+  <%= i.submit %>
+<% end %>
+<hr>
+<h3>Secrets</h3>
+<% @user.secrets.each do |i| %>
+  <p><%= i.content %></p>
+  <p>Likes: <%= i.likes.length %></p>
+  <%= link_to 'Delete', secret_path(i), method: :delete %>
+<% end %>
+</br>
+</br>
+<%= link_to 'All Secrets', secrets_path %>
+</br>
+<%= link_to 'Edit Profile', edit_user_path(@user.id) %>

@@ -1,0 +1,73 @@
+rails g model Comment content:text commentable:references{polymorphic}
+
+rake db:migrate
+
+			****************MODELS***************
+class Comment < ActiveRecord::Base
+  belongs_to :commentable, polymorphic: true
+end
+
+Blog, User, Post, and Message Models have this line in them: 
+	has_many :comments, as: :commentable
+ex:
+class Message < ActiveRecord::Base
+  has_many :comments, as: :commentable
+  belongs_to :post
+  belongs_to :user
+  validates :message, presence: true
+end
+			**************END MODELS****************
+
+
+			***************CREATING*****************
+User.first.comments.create(content:'first comment')
+
+4.times{Blog.second.comments.create(content:Faker::Hipster.sentence)}
+
+
+			***************FINDING*******************
+User.first.comments
+	finds all the comments for the first user, just like you would blogs, posts, ect.
++----+---------------+----------------+------------------+--------------------+---------------------+
+| id | content       | commentable_id | commentable_type | created_at         | updated_at          |
++----+---------------+----------------+------------------+--------------------+---------------------+
+| 1  | first comment | 1              | User             | 2016-12-03 04:4... | 2016-12-03 04:45... |
++----+---------------+----------------+------------------+--------------------+---------------------+
+
+
+Comment.first.commentable
+	User this on the polymorphic table to get the parent model(in this case for the first Comment)
++----+------------+-----------+----------------------+----------------------+-----------------------+
+| id | first_name | last_name | email                | created_at           | updated_at            |
++----+------------+-----------+----------------------+----------------------+-----------------------+
+| 1  | Bradly     | Collins   | malika@torpwaelch... | 2016-12-02 21:04:... | 2016-12-02 21:04:1... |
++----+------------+-----------+----------------------+----------------------+-----------------------+
+
+Blog.second.comments
+Blog.second.comments.first
+
+
+			**************UPDATING*****************
+Blog.second.comments.first.update(content:'new content')
+
+Comment.update(4, content:'second update')
+
+
+			**************DESTROY******************
+Comment.last.destroy
+
+
+used model method for below
+
+before_destroy :finish_comments
+def finish_comments
+  Blog.find(self.id).comments.destroy_all
+end
+
+
+Blog.second.destroy
+
+			*****************END*******************
+
+
+

@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+    function HashMap(n){
+      this.capacity = n;
+      this.table = []
+    }
+
+    HashMap.prototype.add = function(key, value){
+      var hash = key.hashcode()
+      var index = mod(hash, this.capacity)
+      if(Array.isArray(this[index])){
+        this[index].push([key, value])
+      } else{ //if index is empty, this creates the inner array with the key value pair already inside
+        this[index].push([ [key,value] ])
+      }
+      return this
+    }
+
+    HashMap.prototype.isEmpty = function(){
+      return this.length == 0? true: false
+    }
+
+    HashMap.prototype.findKey = function(key){
+      var hash = key.hashcode()
+      var index = mod(hash, this.capacity)
+      if(Array.isArray(this[index])){
+        for (var i = 0; i < this[index].length; i++){
+          if(this[index][i][0] == key)
+            return this[index][i][1]
+        }
+      }
+      return null //this works if the index is empty or the key isn't contained in it
+    }
+
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>

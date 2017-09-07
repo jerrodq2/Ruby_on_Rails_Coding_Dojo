@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+    //Circular Queues with arrays pg.73
+    //our group decided to do things a little differently, both head and tail start at -1, then they move when they perform an action(insert, remove) and stay at the index that they just performed that action. So at the start, the tail starts at -1, when we insert the first value, tail moves to index of 0, inserts there and stays there until the next insertion.
+    function CircularQueue(cap){
+      this.head = -1
+      this.tail = -1
+      this.queue = []
+      this.capacity = cap
+    }
+    //if we create this as a class, we would use prototype methods
+    CQ.prototype.enQueue = function(val){
+      if(this.tail + 1 > this.capacity -1){ //Then we are at the end of the queue and need to circle around
+        if(this[0] == null){
+          this[0] = val
+          this.tail = 0
+        } else{ //next insertion spot isn't null, meaning head hasn't removed that one yet, queue is full
+          return false
+        } //end of inner if/else
+
+      } else if(this[tail +1] == null){
+        this[tail+1] = val
+        tail +=1
+      } else{ //queue is full
+        return false
+      }
+    }
+
+    CQ.prototype.dequeue = function(){
+      if(this.head + 1 > this.capacity - 1){ //then we're at the end of the queue and need to go back to the start
+        if(this[0] == null){ //Then there is nothing to remove
+          return false
+        } else {
+          var temp = this[0]
+          this[0] = null
+          this.head = 0
+          return temp
+        } //end of inner if/else
+
+      } else if(this[head + 1] == null){
+        return false //nothing to remove
+      } else {
+        var temp = this[head + 1]
+        this[head + 1] = null
+        this.head += 1
+        return temp
+      }
+    }
+
+    CQ.prototype.isFull = function(){
+      if(this.tail + 1 > this.capacity -1){
+        if(this[0] == null){ // then it's not full
+          return false
+        } else {
+          return true
+        } // end of inner if/else
+
+      }else if(this[tail + 1] == null){
+        return false
+      } else {
+        return true
+      }
+    }
+
+
+  });
+
+
+  $(function(){
+    // or here, pick one.
+  });
+  </script>
+</head>
+<body>
+
+</body>
+</html>
