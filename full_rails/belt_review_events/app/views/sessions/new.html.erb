@@ -2,6 +2,7 @@
 <% if flash[:error] %>
   <p><%= flash[:error] %></p>
 <% end %>
+<!-- Notice that this flash error just shows the entire flash message, but the below one uses .each, I did that because I specified what error would be sent back with this flash in the controller and it can only be one error message -->
 <form class="" action="/sessions" method="post">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
   Email: <input type="text" name="email" value="">
@@ -9,6 +10,10 @@
   <input type="submit" name="" value="Log In">
 </form>
 </br>
+
+
+
+
 <h1>Register</h1>
 </br>
 <% if flash[:errors] %>
@@ -17,6 +22,8 @@
   <% end %>
 <% end %>
 </br>
+
+
 <%= form_for @user do |i| %>
   <%= i.label :first_name %>:
   <%= i.text_field :first_name %></br>
@@ -31,6 +38,7 @@
   <%= i.text_field :city%></br>
 
   <%= i.select :state, options_for_select(@states.collect{|x| [x.state, x.id]}), include_blank: false %></br>
+  <!-- This is an example of not only a select statement, but using it with a query result in a form helper -->
 
   <%= i.label :password %>:
   <%= i.password_field :password %></br>

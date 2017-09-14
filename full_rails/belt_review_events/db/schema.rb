@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20161214164233) do
     t.string   "city"
     t.string   "email"
     t.string   "password_digest"
+    # password_digest is recognized by rails, when creating a model, make sure to create it exactly like this, ex: rails g model User first_name:string password_digest:string    though it will still be referred to as just "password" when creating, updating, etc. both in the console and rails controllers
+    # Go to the model to see the next step, "has_secure_password" needs to be included in the model
     t.integer  "state_id"
     t.datetime "created_at"
     t.datetime "updated_at"
