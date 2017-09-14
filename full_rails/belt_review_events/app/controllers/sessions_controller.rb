@@ -6,7 +6,9 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email])
+    # First find ther user by their email
     if !user
+      # if the query doesn't find anything, user is = to nil, which is false
       flash[:error] = 'Invalid email'
       redirect_to new_session_path
     elsif !user.authenticate(params[:password])

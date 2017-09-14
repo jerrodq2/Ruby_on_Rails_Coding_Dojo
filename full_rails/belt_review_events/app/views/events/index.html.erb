@@ -1,6 +1,8 @@
 <%= link_to 'Edit My Profile', user_path(session[:id]) %>
+<!-- a link to edit the logged in user -->
 <h1>Welcome <%= session[:name] %></h1>
 <h3>Here are some events in your state:</h3>
+
 <table>
   <tr>
     <th>Name</th><th>Date</th><th>Location</th><th>Host</th><th>Action/Status</th>
@@ -9,16 +11,19 @@
     <% if i.state.state == session[:state] %>
       <tr>
         <td><%= link_to "#{i.name}", event_path(i) %></td>
+        <!-- Notice how the link goes to '/event/:id', the show path, the shorthand for this is event_path(id), or you can put the entire instance in it like I did above -->
         <td><%= i.date.strftime("%B %d, %Y") %></td>
+        <!-- strftime is used to format a date. It can be viewed here: https://apidock.com/ruby/DateTime/strftime  -->
         <td><%= i.city %></td>
         <td><%= i.user.first_name %></td>
+
         <td>
           <% if i.user.id == session[:id] %>
             <%= link_to 'Edit', event_path(i) %>
             <%= link_to 'Delete', event_path(i), method: :delete %>
           <% end %>
           <% if i.attending_users.include?(@user) %>
-          Joining <%= link_to 'Cancel', roster_path(i.id), method: :delete %>
+          Joined<%= link_to 'Cancel', roster_path(i.id), method: :delete %>
           <% else %>
           <form class="" action="/rosters" method="post">
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
@@ -27,10 +32,17 @@
           </form>
           <% end %>
         </td>
+
       </tr>
     <% end %>
   <% end %>
 </table>
+
+
+
+<!-- NOTICE: that both above and below, at the start of the tables, I do a .each for @events. To lighten the load on the page, I could combine them into one giant .each, and put on table in the above if and the other in an else, ex: if i.state.state == session[:state].... else .... -->
+
+
 <h3>Here are some events in other states:</h3>
 <table>
   <tr>
@@ -49,7 +61,7 @@
             <%= link_to 'Delete', event_path(i), method: :delete %>
           <% end %>
           <% if i.attending_users.include?(@user) %>
-          Joining <%= link_to 'Cancel', roster_path(i.id), method: :delete %>
+          Joined <%= link_to 'Cancel', roster_path(i.id), method: :delete %>
           <% else %>
           <form class="" action="/rosters" method="post">
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
@@ -69,6 +81,8 @@
   <% end %>
 <% end %>
 </br>
+
+
 <h3>Add Event</h3>
 <%= form_for @new do |i| %>
   <%= i.label :name %>:
