@@ -10,10 +10,7 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "sessions id and first_name" do
     before do
-      # puts '(((((((((())))))))))'
       @user = create_user
-      # puts State.first.id
-      # puts '(((((((((())))))))))'
       post :create, email:@user.email, password:@user.password
     end
     # In the "before do" block above, I hit one of the methods in the sessions_controller. Basically, you act like the routes.rb file. So it goes like this: "action(post,get, etc.) :controller_method, params". So in the above code, I tell it to post to the create method, and pass it the params email and password, which looks like: {"email"=>"ds@yahoo.com", "password"=>"password", "controller"=>"sessions", "action"=>"create"}. Since we are in the spec file for the sessions controller, it will look in that controller for these methods

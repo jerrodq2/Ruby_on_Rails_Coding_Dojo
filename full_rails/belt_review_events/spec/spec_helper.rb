@@ -6,7 +6,7 @@
 
 # Also, I usually create a folder called "features", just what I like to do. You can see it in this project as an example, it takes place of the view files basically, that's where I usually put things that are outside of my controllers and models
 
-# Not all of this project is finished for rspec, I just tested somethings out, the files that you can look at as an example are: user_spec in models, see this file first. sessions_controller and users controller in controllers. And 4 files in the features folder: logging_in, logging_out, create_user, new_user.
+# Not all of this project is finished for rspec, I just tested somethings out, and removed several files that didn't have rspec in them (other model and controller files for example. The files that you can look at as an example are: user_spec in models, see this file first. sessions_controller and users controller in controllers. And 4 files in the features folder: logging_in, logging_out, create_user, new_user.
 
 RSpec.configure do |config|
 # I've taken all of the default comments out of the files in the spec folder, what's left should just be my comments
