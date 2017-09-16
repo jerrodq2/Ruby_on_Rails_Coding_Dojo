@@ -30,11 +30,11 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 group :test, :development do
-  gem 'rspec-rails' # allows testing with rspec
+  gem 'rspec-rails' # allows testing with rspec, after installing with "bundle install" type: rails g rspec:install
   gem 'database_cleaner' # a gem that cleans/clears the test databse for every rspec test, very important for testing
 end
 group :test do
-  gem 'capybara'
+  gem 'capybara' # a web-based automation framework that simulates how users interact with your application. Basically, it is used in your tests to act like a user. Things like visit, fill_in, click_link, click_button, etc. is capybara at work
 end
 # Use unicorn as the app server
 # gem 'unicorn'

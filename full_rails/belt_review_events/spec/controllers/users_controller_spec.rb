@@ -6,7 +6,6 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'creating user' do
     before do
-      State.current_scope = nil
       create_state
       # I use the method from spec_helper to create a state, since the db is blank at the start of each test, I need a state to create a user
     end
